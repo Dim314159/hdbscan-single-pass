@@ -64,7 +64,7 @@ The key ideas are:
        * This decision is valid now because no future merges can change the internal relationship between **Cluster A** and its children.
        * If **Cluster A** wins, it absorbs all its children (recursively), and they’re pruned from the hierarchy.
        * If not, **Cluster A** is discarded and marked as noise, and its children are retained.
-   * Later, the **new** cluster (parent of **Cluster A**) may itself be merged, triggering the same evaluation and collapse process resulting in absorbing **Cluster A** or leaving it (or its children) intact.
+   * Later, the **new** cluster (parent of **Cluster A**) may itself be merged, triggering the same evaluation and collapse process resulting in absorbing **Cluster A** (and its children if any) or leaving it (and its children if any) intact.
 
 This recursive, local pruning makes the algorithm memory-efficient and conceptually clean—collapsing happens immediately when a cluster’s future is sealed.
 
