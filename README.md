@@ -31,14 +31,14 @@ clusters_dict = ds_agent.get_clusters_dict()
 ## Explanations
 
 ### Original HDBSCAN Workflow (Three-Pass Algorithm)
+HDBSCAN begins by building a Minimum Spanning Tree (MST) using a mutual reachability distance matrix derived from k-nearest neighbor distances.
 
-HDBSCAN typically proceeds through three conceptual passes over the data and the minimum spanning tree:
+Then it proceeds through three conceptual passes:
 
 1. **Upward Pass – Hierarchy Construction**
 
-   * Start with a mutual reachability distance matrix derived from k-nearest neighbor distances.
-   * Build a minimum spanning tree (MST) from this matrix.
-   * Traverse the MST edges in order of increasing distance to build a cluster hierarchy (dendrogram), recording `lambda_birth` and `lambda_death` for each cluster.
+   * Traverse the MST edges in order of increasing distance.
+   * Build a cluster hierarchy (dendrogram), assigning `lambda_birth` and `lambda_death` to each cluster.
 
 2. **Downward Pass – Persistence Calculation**
 
@@ -52,13 +52,20 @@ HDBSCAN typically proceeds through three conceptual passes over the data and the
    * Assign points to the most stable clusters and label remaining points as noise.
 
 ### Single-Pass HDBSCAN Variant
+This implementation retains the initial MST construction step, but integrates all three conceptual passes into a single traversal over the MST edges.
 
-This implementation integrates all three phases into a **single traversal** of the MST:
+The key ideas are:
+   * Each cluster starts with only a `lambda_death` (think of time running backward).
+   * When two clusters are merged into a **new** cluster:
+       * Each of the two input clusters receives its `lambda_birth`, and its persistence is computed immediately.
+       * Each of the two input clusters go through **collapsing**. Let’s call one of them **Cluster A**.
+   * **Collapse logic**:
+       * For **Cluster A**, we compare its persistence to the total persistence of its children (if any).
+       * This decision is valid now because no future merges can change the internal relationship between **Cluster A** and its children.
+       * If **Cluster A** wins, it absorbs all its children (recursively), and they’re pruned from the hierarchy.
+       * If not, **Cluster A** is discarded and marked as noise, and its children are retained.
+   * Later, the **new** cluster (parent of **Cluster A**) may itself be merged, triggering the same evaluation and collapse process resulting in absorbing **Cluster A** or leaving it (or its children) intact.
 
-* As each pair of clusters is merged, their `lambda_birth` is set, and their persistence is computed on the spot.
-* Immediately after merging, the algorithm decides whether to retain the newly formed cluster or its children by comparing persistences.
-* Collapsed subclusters are discarded immediately, minimizing memory usage.
-* This approach avoids explicit post-traversals, making it more efficient while preserving the core behavior of standard HDBSCAN.
+This recursive, local pruning makes the algorithm memory-efficient and conceptually clean—collapsing happens immediately when a cluster’s future is sealed.
 
-By evaluating and collapsing clusters incrementally, this variant replicates the effect of HDBSCAN’s pruning in real-time during the MST edge iteration.
-
+By collapsing clusters as they become finalized, this variant replicates the pruning behavior of standard HDBSCAN in real time—without needing post-processing passes.
