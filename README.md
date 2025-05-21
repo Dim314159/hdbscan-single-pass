@@ -52,20 +52,25 @@ Then it proceeds through three conceptual passes:
    * Assign points to the most stable clusters and label remaining points as noise.
 
 ### Single-Pass HDBSCAN Variant
-This implementation retains the initial MST construction step, but integrates all three conceptual passes into a single traversal over the MST edges.
+This implementation retains the initial MST construction step, but integrates all three conceptual passes into a **single traversal** over the MST edges.
 
 The key ideas are:
    * Each cluster starts with only a `lambda_death` (think of time running backward).
    * When two clusters are merged into a **new** cluster:
-       * Each of the two input clusters receives its `lambda_birth`, and its persistence is computed immediately.
-       * Each of the two input clusters go through **collapsing**. Let’s call one of them **Cluster A**.
+       * Each of the two input clusters receives its `lambda_birth`.
+       * Each of them go through **collapsing** (let’s call one of them **Cluster A**).
    * **Collapse logic**:
-       * For **Cluster A**, we compare its persistence to the total persistence of its children (if any).
+       * Compute persistence of **Cluster A**.
+       * Compare its persistence to the total persistence of its children (if any).
        * This decision is valid now because no future merges can change the internal relationship between **Cluster A** and its children.
-       * If **Cluster A** wins, it absorbs both its children (and any descendants recursively), and all descendats are pruned from the hierarchy.
-       * If not, **Cluster A** is marked as noise (remains in the tree), and its children are retained.
-   * Later, the **new** cluster (parent of **Cluster A**) may itself be merged, triggering the same evaluation and **collapse** process resulting in absorbing **Cluster A** (and its children if any) or leaving it (and its children if any) intact.
+       * If **Cluster A** wins:
+           * It absorbs both its children (and any descendants recursively).
+           * All descendats are pruned from the hierarchy.
+       * If children win:
+           * **Cluster A** is marked as noise (remains in the tree).
+           * The children are retained as active clusters.
+   * Later, the **new** cluster (parent of **Cluster A**) will merge again, triggering the same **collapse** process on its children (including **Cluster A**) resulting in absorbing **Cluster A** (and its children if any) or leaving it (and its children if any) intact.
 
-This recursive, local pruning makes the algorithm memory-efficient and conceptually clean—collapsing happens immediately when a cluster’s future is sealed.
+This recursive, local pruning makes the algorithm memory-efficient and conceptually clean: collapsing happens immediately when a cluster’s future is sealed.
 
 By collapsing clusters as they become finalized, this variant replicates the pruning behavior of standard HDBSCAN in real time—without needing post-processing passes.
