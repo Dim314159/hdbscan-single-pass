@@ -11,7 +11,7 @@ Key features:
 * Identifies persistent clusters and noise
 
 ## Example
-For 2d data X_train  (-1 cluster represents noise)
+For 2d data X_train  (cluster '-1' represents noise)
 
 n_points = X_train.shape[0]  
 mst_agent = MST(number_of_nearest_neighbors=4)  
