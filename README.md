@@ -113,7 +113,7 @@ A small numerical tolerance to prevent division-by-zero or instability in lambda
 > Currently, it does not use low-level parallelism or optimized C/C++ extensions,  
 > which makes it considerably slower.
 
-Instantiate the class (you can pass parameters as needed):
+Instantiate the class (you can pass parameters - optional):
 ```python
 clusterer = HDBSCAN()
 ```
@@ -122,7 +122,7 @@ Fit the model and retrieve labels:
 clusterer.fit(X)  
 labels = clusterer.labels_  
 ```
-Or do it in a single step:
+Or do both in a single line:
 ```python
 labels = clusterer.fit_predict(X)
 ```
