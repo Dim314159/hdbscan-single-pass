@@ -100,26 +100,25 @@ Controls the search effort in FAISS queries. Higher values lead to more accurate
 `epsilon` : `float`, default=`1e-10`  
 A small numerical tolerance to prevent division-by-zero or instability in lambda-based computations.
 
-🧠 Notes
-`faiss_M` controls how many links are kept per node in the HNSW graph.
-`faiss_efConstruction` controls quality of graph during index building.
-`faiss_efSearch` controls how many nodes to explore at query time. Larger = higher recall.
+🧠 Notes  
+`faiss_M` controls how many links are kept per node in the HNSW graph.  
+`faiss_efConstruction` controls quality of graph during index building.  
+`faiss_efSearch` controls how many nodes to explore at query time. Larger = higher recall.  
 
 ### Example
-Initiate class object:  
-clusterer= HDBSCAN()
-you can get labels by:  
+Instantiate the class (you can pass parameters as needed):
+```python
+clusterer = HDBSCAN()
+```
+Fit the model and retrieve labels:
+```python
 clusterer.fit(X)  
 labels = clusterer.labels_  
-
-or immideately:
+```
+Or do it in a single step:
+```python
 labels = clusterer.fit_predict(X)
-
-(lebel '-1' represents noise)
-
+```
+Note: A label of `-1` indicates noise.
 
 ![image](https://github.com/user-attachments/assets/f401b8fc-02c1-41d0-8e03-ef76ecf27076)
-
-
-
-
