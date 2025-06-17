@@ -61,49 +61,44 @@ By collapsing clusters as they become finalized, this variant replicates the pru
 
 ## How to use
 ### Parameters to tune:
-`min_cluster_size` : int, default=5  
+`min_cluster_size` : `int`, default=`5`  
 The minimum size of clusters; used to decide when a cluster is considered significant. Smaller clusters are treated as noise or merged into larger ones.
 
-`number_of_nearest_neighbors` : int or None, default=None  
+`number_of_nearest_neighbors` : `int` or `None`, default=`None`  
 The number of neighbors used to define the core distance and compute mutual reachability. If None, it defaults to min_cluster_size. Must be ≤ min_cluster_size.
 
-`cpu_gpu_device` : str, default='cpu'  
+`cpu_gpu_device` : `str`, default=`'cpu'`  
 The device to run computations on. Options:
-     'cpu' – all computations on CPU.
-     'cuda' or 'cuda:0', 'cuda:1', etc. – use specific GPU. Requires PyTorch with CUDA.
+  - `'cpu'` – all computations on CPU.
+  - `'cuda'` or `'cuda:0'`, `'cuda:1'`, etc. – use specific GPU. Requires PyTorch with CUDA.
 
-`backend` : str or None, default=None  
+`backend` : `str` or `None`, default=`None`  
 The algorithm used to compute approximate nearest neighbors:
-    None – Exact computation using PyTorch (torch.cdist).
-     Best for small datasets (<10,000 points).
-     Avoid if your machine runs out of memory during distance computation.
-    'faiss' – Use Facebook’s FAISS for fast approximate nearest neighbors.
-     Recommended if:
-    You’re working with large datasets,
-    You want GPU acceleration, or
-    You need faster clustering with minimal accuracy tradeoff.
-    FAISS supports both CPU and GPU,
-    Requires separate installation (pip install faiss-cpu or faiss-gpu).
-    'hnsw' – Use HNSWlib, a fast CPU-only alternative.
-     Simpler to install than FAISS.
-     Good option if you:
-        Don’t have a GPU,
-        Don’t want to install FAISS,
-        Still want fast clustering on large datasets.
+  - `None` – Exact computation using PyTorch (torch.cdist).
+    - Best for small datasets (<10,000 points).
+    - Avoid if your machine runs out of memory during distance computation.
+  - `'faiss'` – Use Facebook’s FAISS for fast approximate nearest neighbors. Recommended if:
+    - You’re working with large datasets,
+    - You want GPU acceleration, or
+    - You need faster clustering with minimal accuracy tradeoff.
+    - FAISS supports both CPU and GPU. Requires separate installation (`pip install faiss-cpu` or `faiss-gpu`).
+  - `'hnsw'` – Use HNSWlib, a fast CPU-only alternative.
+    - Simpler to install than FAISS. Good option if you:
+    - Don’t have a GPU,
+    - Don’t want to install FAISS,
+    - Still want fast clustering on large datasets.
 
-`faiss_M` : int, default=32
- Connectivity parameter for FAISS HNSW index. Higher values yield better accuracy at the cost of indexing time and memory. Allowed values: 16, 32, 48.
+`faiss_M` : `int`, default=`32`  
+Connectivity parameter for FAISS HNSW index. Higher values yield better accuracy at the cost of indexing time and memory. Allowed values: `16`, `32`, `48`.
 
-`faiss_efConstruction` : int, default=64
- Controls the effort during FAISS index construction. Higher values give better accuracy. Allowed values: 32, 64, 128.
+`faiss_efConstruction` : `int`, default=`64`  
+Controls the effort during FAISS index construction. Higher values give better accuracy. Allowed values: `32`, `64`, `128`.
 
-`faiss_efSearch` : int, default=64
- Controls the search effort in FAISS queries. Higher values lead to more accurate k-NN results. Allowed values: 32, 64, 128, 256.
+`faiss_efSearch` : `int`, default=`64`  
+Controls the search effort in FAISS queries. Higher values lead to more accurate k-NN results. Allowed values: `32`, `64`, `128`, `256`.
 
-`epsilon` : float, default=1e-10
- A small numerical tolerance to prevent division-by-zero or instability in lambda-based computations.
-
-
+`epsilon` : `float`, default=`1e-10`  
+A small numerical tolerance to prevent division-by-zero or instability in lambda-based computations.
 
 🧠 Notes
 `faiss_M` controls how many links are kept per node in the HNSW graph.
