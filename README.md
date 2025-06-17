@@ -59,11 +59,8 @@ This recursive, local pruning makes the algorithm memory-efficient and conceptua
 By collapsing clusters as they become finalized, this variant replicates the pruning behavior of standard HDBSCAN in real time—without needing post-processing passes.
 
 
-## Example
-Initiate class object:
-clusterer= HDBSCAN()
-
-Parameters to tune:
+## How to use
+### Parameters to tune:
 min_cluster_size : int, default=5
  The minimum size of clusters; used to decide when a cluster is considered significant. Smaller clusters are treated as noise or merged into larger ones.
 
@@ -113,10 +110,12 @@ M controls how many links are kept per node in the HNSW graph.
 efConstruction controls quality of graph during index building.
 efSearch controls how many nodes to explore at query time. Larger = higher recall.
 
-
-you can get labels by:
-clusterer.fit(X)
-labels = clusterer.labels_
+### Example
+Initiate class object:  
+clusterer= HDBSCAN()
+you can get labels by:  
+clusterer.fit(X)  
+labels = clusterer.labels_  
 
 or immideately:
 labels = clusterer.fit_predict(X)
