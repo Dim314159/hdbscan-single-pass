@@ -105,7 +105,14 @@ A small numerical tolerance to prevent division-by-zero or instability in lambda
 `faiss_efConstruction` controls quality of graph during index building.  
 `faiss_efSearch` controls how many nodes to explore at query time. Larger = higher recall.  
 
+
 ### Example
+> **⚠️ Disclaimer:**  
+> This implementation is significantly slower than the scikit-learn version of HDBSCAN.  
+> It prioritizes clarity and educational value over performance.  
+> Currently, it does not use low-level parallelism or optimized C/C++ extensions,  
+> which makes it considerably slower.
+
 Instantiate the class (you can pass parameters as needed):
 ```python
 clusterer = HDBSCAN()
