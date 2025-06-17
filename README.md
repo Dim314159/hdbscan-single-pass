@@ -61,19 +61,19 @@ By collapsing clusters as they become finalized, this variant replicates the pru
 
 ## How to use
 ### Parameters to tune:
-`min_cluster_size` : int, default=5
- The minimum size of clusters; used to decide when a cluster is considered significant. Smaller clusters are treated as noise or merged into larger ones.
+`min_cluster_size` : int, default=5  
+The minimum size of clusters; used to decide when a cluster is considered significant. Smaller clusters are treated as noise or merged into larger ones.
 
-`number_of_nearest_neighbors` : int or None, default=None
- The number of neighbors used to define the core distance and compute mutual reachability. If None, it defaults to min_cluster_size. Must be ≤ min_cluster_size.
+`number_of_nearest_neighbors` : int or None, default=None  
+The number of neighbors used to define the core distance and compute mutual reachability. If None, it defaults to min_cluster_size. Must be ≤ min_cluster_size.
 
-`cpu_gpu_device` : str, default='cpu'
- The device to run computations on. Options:
+`cpu_gpu_device` : str, default='cpu'  
+The device to run computations on. Options:
      'cpu' – all computations on CPU.
      'cuda' or 'cuda:0', 'cuda:1', etc. – use specific GPU. Requires PyTorch with CUDA.
 
-`backend` : str or None, default=None
- The algorithm used to compute approximate nearest neighbors:
+`backend` : str or None, default=None  
+The algorithm used to compute approximate nearest neighbors:
     None – Exact computation using PyTorch (torch.cdist).
      Best for small datasets (<10,000 points).
      Avoid if your machine runs out of memory during distance computation.
