@@ -87,6 +87,7 @@ The algorithm used to compute approximate nearest neighbors:
     - Don’t have a GPU,
     - Don’t want to install FAISS,
     - Still want fast clustering on large datasets.
+> ⚠️ Support for `'faiss'` and `'hnsw'` backends is experimental and has not been thoroughly validated.
 
 `faiss_M` : `int`, default=`32`  
 Connectivity parameter for FAISS HNSW index. Higher values yield better accuracy at the cost of indexing time and memory. Allowed values: `16`, `32`, `48`.
